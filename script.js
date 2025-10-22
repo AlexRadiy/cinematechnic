@@ -17,6 +17,7 @@ let socks, socksLight;
 let booom, meow, buzz, buzz2, click, sockssound, paper;
 let boomboxplay, boomboxhiss, boomboxchange, boomboxstop;
 let speechFiles;
+let jar;
 let chooselife, vacation, SA, siganim;
 let cassette1, cassette2, cassette3;
 let freefilms;
@@ -29,6 +30,7 @@ let mobileDevice = false;
 
 let menuOpen = false;
 let YOURFavStatus = false;
+let secret1found = false;
 
 let highlightBox = null;
 
@@ -227,8 +229,6 @@ function init() {
   //Light
 
 
-
-
   OverallLight = new THREE.AmbientLight(0x7a6b5c, 0.4, 10000);
 OverallLight.position.set(0, 200, -100);
 scene.add(OverallLight);
@@ -350,6 +350,15 @@ speechFiles = [
   'speech5.mp3',
 ];
 
+[music1, music2, music3].forEach(track => {
+  track.onEnded = () => {
+    boombox.isOn = false;
+    play.visible = false;
+    pause.visible = true;
+    boomboxstop.play();
+  };
+});
+
 
   // Box textures
   const loader = new THREE.TextureLoader();
@@ -383,19 +392,10 @@ speechFiles = [
   const tabletopmaterials = [
     new THREE.MeshLambertMaterial({ map: loader.load('tabletop_side.png'), side: THREE.DoubleSide }), 
     new THREE.MeshLambertMaterial({ map: loader.load('tabletop_side.png'), side: THREE.DoubleSide }), 
-    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_top.png'), side: THREE.DoubleSide }),   
-    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_top.png'), side: THREE.DoubleSide }), 
-    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_front.png'), side: THREE.DoubleSide }), 
-    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_front.png'), side: THREE.DoubleSide }),
-  ];
-
-  const tablematerials = [
-    new THREE.MeshLambertMaterial({ map: loader.load('table_side.png'), transparent: true, side: THREE.DoubleSide }), 
-    new THREE.MeshLambertMaterial({ map: loader.load('table_side.png'), transparent: true, side: THREE.DoubleSide }), 
-    new THREE.MeshLambertMaterial({ map: loader.load('table_front.png'), transparent: true, side: THREE.DoubleSide }),   
-    new THREE.MeshLambertMaterial({ map: loader.load('table_front.png'), transparent: true, side: THREE.DoubleSide }), 
-    new THREE.MeshLambertMaterial({ map: loader.load('table_front.png'), transparent: true, side: THREE.DoubleSide }), 
-    new THREE.MeshLambertMaterial({ map: loader.load('table_front.png'), transparent: true, side: THREE.DoubleSide }),
+    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_top2.png'), side: THREE.DoubleSide }),   
+    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_top2.png'), side: THREE.DoubleSide }), 
+    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_front2.png'), side: THREE.DoubleSide }), 
+    new THREE.MeshLambertMaterial({ map: loader.load('tabletop_front2.png'), side: THREE.DoubleSide }),
   ];
 
   const headlampmaterials = [
@@ -479,7 +479,7 @@ speechFiles = [
   cassette3 = new THREE.Mesh(new THREE.BoxGeometry(50, 10, 40), new THREE.MeshLambertMaterial({ map: loader.load('cover3.png'), transparent: true, side: THREE.DoubleSide }));
   cassette3.position.set(350, -94, -315);
   cassette3.rotation.y = 0.5;
-  scene.add(cassette3);
+  //scene.add(cassette3);
 
   pause = new THREE.Mesh(new THREE.PlaneGeometry(15, 15), new THREE.MeshLambertMaterial({ map: loader.load('pause.png'), transparent: true, side: THREE.DoubleSide }));
   pause.position.set(211, -31, -360);
@@ -558,9 +558,45 @@ speechFiles = [
   tabletop.position.set(0, -110, -400);
   scene.add(tabletop);
 
-  const table = new THREE.Mesh(new THREE.BoxGeometry(750, 157, 207), tablematerials);
+  const table = new THREE.Mesh(new THREE.BoxGeometry(750, 157, 207), new THREE.MeshLambertMaterial({ map: loader.load('table_front3.png'), transparent: true, side: THREE.DoubleSide }));
   table.position.set(0, -180, -400);
   scene.add(table);
+
+
+  //JAR
+jar = new THREE.Mesh(
+  new THREE.CylinderGeometry(25, 25, 60, 80),
+  new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('jar.png') })
+);
+jar.position.set(-150, -72, -320);
+jar.rotation.y = Math.PI / 1;
+jar.scale.set(0.75, 0.75, 0.75);
+scene.add(jar);
+
+const jarBottom = new THREE.Mesh(
+  new THREE.SphereGeometry(25, 80, 40, 0, Math.PI * 2, 0, Math.PI / 2),
+  new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('cond.png') })
+);
+jarBottom.position.set(-150, -94, -320);
+jarBottom.rotation.x = Math.PI;
+jarBottom.scale.set(0.75, 0.35 * 0.75, 0.75);
+scene.add(jarBottom);
+
+const jarTop = new THREE.Mesh(
+  new THREE.SphereGeometry(25, 80, 40, 0, Math.PI * 2, 0, Math.PI / 2),
+  new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('cond.png') })
+);
+jarTop.position.set(-150, -50, -320);
+jarTop.scale.set(0.75, 0.35 * 0.75, 0.75);
+scene.add(jarTop);
+
+const jarlid = new THREE.Mesh(
+  new THREE.CylinderGeometry(20, 20, 7, 160),
+  new THREE.MeshStandardMaterial({ map: new THREE.TextureLoader().load('Ceiling.png') })
+);
+jarlid.position.set(-150, -42, -320);
+jarlid.scale.set(0.75, 0.75, 0.75);
+scene.add(jarlid);
 
   // SHELVES and FREE box
   freefilms = new THREE.Mesh(new THREE.BoxGeometry(200, 100, 80), new THREE.MeshLambertMaterial({ map: loader.load('free.png'), transparent: true, side: THREE.DoubleSide }));
@@ -604,6 +640,10 @@ const shelve1 = new THREE.Mesh(new THREE.BoxGeometry(450, 10, 90), new THREE.Mes
   shelvefilms2.position.set(-260, -28, -580);
   scene.add(shelvefilms2);
 
+     const shelveside = new THREE.Mesh(new THREE.PlaneGeometry(170, 515), new THREE.MeshLambertMaterial({ map: loader.load('shelve.png'), transparent: true, side: THREE.DoubleSide }));
+  shelveside.position.set(-639, 16, -660);
+  shelveside.rotation.y = Math.PI / 2;
+ //scene.add(shelveside);
 
 
   // Guy texture
@@ -642,12 +682,13 @@ scene.add(Smoke2);
   StandGuy.name = "MENU";
   boomboxMesh.name = "music";
   cassette1.name = "Vibes";
-  cassette2.name = "Welcome";
+  cassette2.name = "Vacation in Zen";
   cassette3.name = "Meow";
   socks.name = "Socks";
   freefilms.name = "free films";
   siganim.name = "booklet";
-  goodbye.name = "photo"
+  goodbye.name = "photo";
+  jar.name = "basically ashtray";
 
   // Mouse move and click
   document.addEventListener('mousemove', onDocumentMouseMove);
@@ -803,10 +844,15 @@ function onClick() {
     siganimfunction();
   }
 
+    const jarIntersects = raycaster.intersectObject(jar);
+  if (jarIntersects.length > 0) {
+    window.open('https://ko-fi.com/admin99', '_blank');
+  }
 
 }
 
 function siganimfunction() {
+  secret1found = true;
   overlay.style.display = "flex";
   buttonsDiv.innerHTML = "";
   message.innerText = "";
@@ -1290,7 +1336,7 @@ function socksCredits() {
   const items = [
     { text: "Film Oracle",    handler: handleQ1, room: 0 },
     { text: "Find-a-film",    handler: handleQ2, room: 1 },
-    { text: "Cinemaphile",    handler: handleQ3, room: 2 },
+    { text: "Pro mode",    handler: handleQ3, room: 2 },
   ];
 
 
@@ -1617,17 +1663,16 @@ function handleQ1() {
   message.subtext = "";
   setSubtext('');
 
-  // top-left: back to InitialOptions
   if (!mobileDevice) {
     ensureTopLeftButton("back-home", "back", () => showInitialOptions());
   } else {
     ensureTopLeftButton("back-home", "back", () => showInitialOptionsMobile());
   }
 
-  // State for continuation
   let lastPromptQ2 = "";
   let seenMoviesQ2 = [];
   let seenBtnQ2 = null;
+  let shareBtnQ2 = null;
 
   const extractMovieTitle = (text) => {
     if (!text) return "";
@@ -1636,29 +1681,30 @@ function handleQ1() {
   };
 
   const ensureCloseButton = () => {
-    if (mobileDevice) {
-    const alreadyHasClose = [...buttonsDiv.querySelectorAll("button")].some(
-      (b) => b.textContent === "close"
-    );
-    if (!alreadyHasClose) {
-      const closeBtn = document.createElement("button");
-      closeBtn.textContent = "close";
-      closeBtn.style.marginTop = "18px";
-      closeBtn.style.marginRight = "18px";
-      closeBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        overlay.style.display = "none";
-        animateCameraForward(130, 300);
-      });
-      buttonsDiv.appendChild(closeBtn);
-    }
+    if (!mobileDevice) {
+      const alreadyHasClose = [...buttonsDiv.querySelectorAll("button")].some(
+        (b) => b.textContent === "close"
+      );
+      if (!alreadyHasClose) {
+        const closeBtn = document.createElement("button");
+        closeBtn.textContent = "close";
+        closeBtn.style.marginTop = "18px";
+        closeBtn.style.marginRight = "18px";
+        closeBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          overlay.style.display = "none";
+          animateCameraForward(130, 300);
+        });
+      }
     }
   };
 
-  // Tweaked seenBtn logic: if 10+ movies, just show fun message
   const appendSeenButton = () => {
     if (seenBtnQ2 && seenBtnQ2.isConnected) {
       seenBtnQ2.remove();
+    }
+    if (shareBtnQ2 && shareBtnQ2.isConnected) {
+      shareBtnQ2.remove();
     }
     seenBtnQ2 = document.createElement("button");
     seenBtnQ2.textContent = "I`ve seen that one!";
@@ -1668,7 +1714,6 @@ function handleQ1() {
       if (seenMoviesQ2.length >= 10) {
         message.innerText = "No way you`ve seen all of those.";
         buttonsDiv.innerHTML = "";
-        // Close button
         const closeBtn = document.createElement("button");
         closeBtn.textContent = "close";
         closeBtn.style.marginTop = "18px";
@@ -1679,7 +1724,6 @@ function handleQ1() {
           animateCameraForward(130, 300);
         });
         buttonsDiv.appendChild(closeBtn);
-        // Back button
         const backBtn = document.createElement("button");
         backBtn.textContent = "back";
         backBtn.style.marginTop = "18px";
@@ -1697,6 +1741,17 @@ function handleQ1() {
       }
     });
     buttonsDiv.appendChild(seenBtnQ2);
+
+    shareBtnQ2 = document.createElement("button");
+    shareBtnQ2.textContent = "Share";
+    shareBtnQ2.style.display = "inline-block";
+    shareBtnQ2.style.marginLeft = "14px";
+    shareBtnQ2.addEventListener("click", () => {
+      const txt = message.innerText + "\n\nhttps://alexradiy.github.io/cinematechnic/";
+      navigator.clipboard.writeText(txt);
+      shareBtnQ2.textContent = "Copied link";
+    });
+    buttonsDiv.appendChild(shareBtnQ2);
   };
 
   const sendPrompt = (prompt, isContinuation = false) => {
@@ -1724,16 +1779,12 @@ function handleQ1() {
           }
 
           if (title) {
-            // Row: dislike (left) — Google (center) — like (right)
             const actionsRow = document.createElement("div");
             actionsRow.style.display = "flex";
             actionsRow.style.alignItems = "center";
             actionsRow.style.justifyContent = "center";
             actionsRow.style.gap = "16px";
             actionsRow.style.margin = "14px auto 0";
-
-            // Pixel-art thumbs from a 16x16 filled grid (white silhouette) to match the provided look.
-
 
             const svgFromGrid = (grid, flippedY = false) => {
               const rects = [];
@@ -1765,13 +1816,12 @@ function handleQ1() {
               b.style.display = "inline-flex";
               b.style.alignItems = "center";
               b.style.justifyContent = "center";
-              // Bigger buttons
               b.style.width = "56px";
               b.style.height = "56px";
               b.style.padding = "0";
               b.style.border = "2px solid #555";
-              b.style.background = "#000";   // default: black bg
-              b.style.color = "#fff";        // default: white icon
+              b.style.background = "#000";
+              b.style.color = "#fff";
               b.style.cursor = "pointer";
               b.style.userSelect = "none";
               b.innerHTML = svg;
@@ -1785,7 +1835,6 @@ function handleQ1() {
             let disliked = false;
 
             const updateThumbStyles = () => {
-              // Selected = inverted (black icon on white bg). Default = white icon on black bg.
               if (liked) {
                 likeBtn.style.background = "#fff";
                 likeBtn.style.color = "#000";
@@ -1817,7 +1866,7 @@ function handleQ1() {
             });
 
             const linkBtn = document.createElement("button");
-            linkBtn.textContent = "Google this film";
+            linkBtn.textContent = "Google it";
             linkBtn.style.display = "inline-block";
             linkBtn.addEventListener("click", (e) => {
               e.stopPropagation();
@@ -1828,10 +1877,7 @@ function handleQ1() {
               );
             });
 
-            // Order: dislike (left), Google (center), like (right)
-            actionsRow.appendChild(dislikeBtn);
             actionsRow.appendChild(linkBtn);
-            actionsRow.appendChild(likeBtn);
             buttonsDiv.appendChild(actionsRow);
 
             updateThumbStyles();
@@ -1990,7 +2036,35 @@ function handleQ1() {
     }
   });
 
-  if (YOURFavStatus === false) {
+  if (secret1found === true) {
+    const btn2 = document.createElement("button");
+    btn2.textContent = "What would you recommend?";
+    btn2.style.display = "block";
+    btn2.style.marginTop = "30px";
+    btn2.addEventListener("click", () => {
+      YOURFavStatus = true;
+             buttonsDiv.innerHTML = ""
+      speechAnimation("Hm... You really should check out `Cremator`. Basically Ari Aster style story with Urusevsky visuals but 1969 and Checkoslovakian", message, 30)
+
+          .then(() => {
+
+      const closeBtn = document.createElement("button");
+      closeBtn.textContent = "cool";
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        handleQ1();
+          });
+      buttonsDiv.appendChild(closeBtn);})
+    });
+    buttonsDiv.appendChild(list1);
+    buttonsDiv.appendChild(list2);
+    buttonsDiv.appendChild(moodBtn);
+    buttonsDiv.appendChild(input);
+    buttonsDiv.appendChild(labelDisclamer);
+    buttonsDiv.appendChild(btn1);
+    buttonsDiv.appendChild(btn2);
+  } else {
+    if (YOURFavStatus === false){
     const btn2 = document.createElement("button");
     btn2.textContent = "What are YOUR favourites?";
     btn2.style.display = "block";
@@ -2007,7 +2081,6 @@ function handleQ1() {
       closeBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         handleQ1();
-        animateCameraForward(80, 300);
       });
       buttonsDiv.appendChild(closeBtn);
     });
@@ -2018,15 +2091,17 @@ function handleQ1() {
     buttonsDiv.appendChild(labelDisclamer);
     buttonsDiv.appendChild(btn1);
     buttonsDiv.appendChild(btn2);
-  } else {
+    } else {
     buttonsDiv.appendChild(list1);
     buttonsDiv.appendChild(list2);
     buttonsDiv.appendChild(moodBtn);
     buttonsDiv.appendChild(input);
     buttonsDiv.appendChild(labelDisclamer);
     buttonsDiv.appendChild(btn1);
+    }
   }
 }
+
 // ================= Q2 =================
 function handleQ2() {
   speechAnimation("They already made films about everything.", message, 30);
@@ -2042,6 +2117,7 @@ function handleQ2() {
   let lastPromptQ1 = "";
   let seenMoviesQ1 = [];
   let seenBtnQ1 = null;
+  let shareBtnQ1 = null;
 
   const extractMovieTitle = (text) => {
     if (!text) return "";
@@ -2050,29 +2126,30 @@ function handleQ2() {
   };
 
   const ensureCloseButton = () => {
-    if (mobileDevice) {
-    const alreadyHasClose = [...buttonsDiv.querySelectorAll("button")].some(
-      (b) => b.textContent === "close"
-    );
-    if (!alreadyHasClose) {
-      const closeBtn = document.createElement("button");
-      closeBtn.textContent = "close";
-      closeBtn.style.marginTop = "18px";
-      closeBtn.style.marginRight = "18px";
-      closeBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        overlay.style.display = "none";
-        animateCameraForward(130, 300);
-      });
-      buttonsDiv.appendChild(closeBtn);
-    }
+    if (!mobileDevice) {
+      const alreadyHasClose = [...buttonsDiv.querySelectorAll("button")].some(
+        (b) => b.textContent === "close"
+      );
+      if (!alreadyHasClose) {
+        const closeBtn = document.createElement("button");
+        closeBtn.textContent = "close";
+        closeBtn.style.marginTop = "18px";
+        closeBtn.style.marginRight = "18px";
+        closeBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          overlay.style.display = "none";
+          animateCameraForward(130, 300);
+        });
+      }
     }
   };
 
-  // Tweaked seenBtn logic: if 10+ movies, show message
   const appendSeenButton = () => {
     if (seenBtnQ1 && seenBtnQ1.isConnected) {
       seenBtnQ1.remove();
+    }
+    if (shareBtnQ1 && shareBtnQ1.isConnected) {
+      shareBtnQ1.remove();
     }
     seenBtnQ1 = document.createElement("button");
     seenBtnQ1.textContent = "I`ve seen that one!";
@@ -2081,7 +2158,6 @@ function handleQ2() {
       if (seenMoviesQ1.length >= 10) {
         message.innerText = "No way you`ve seen all of those.";
         buttonsDiv.innerHTML = "";
-        // Close button
         const closeBtn = document.createElement("button");
         closeBtn.textContent = "close";
         closeBtn.style.marginTop = "18px";
@@ -2092,7 +2168,6 @@ function handleQ2() {
           animateCameraForward(130, 300);
         });
         buttonsDiv.appendChild(closeBtn);
-        // Back button
         const backBtn = document.createElement("button");
         backBtn.textContent = "back";
         backBtn.style.marginTop = "18px";
@@ -2110,6 +2185,17 @@ function handleQ2() {
       }
     });
     buttonsDiv.appendChild(seenBtnQ1);
+
+    shareBtnQ1 = document.createElement("button");
+    shareBtnQ1.textContent = "Share";
+    shareBtnQ1.style.display = "inline-block";
+    shareBtnQ1.style.marginLeft = "14px";
+    shareBtnQ1.addEventListener("click", () => {
+      const txt = message.innerText + "\n\nhttps://alexradiy.github.io/cinematechnic/";
+      navigator.clipboard.writeText(txt);
+      shareBtnQ1.textContent = "Copied link";
+    });
+    buttonsDiv.appendChild(shareBtnQ1);
   };
 
   const sendPrompt = (prompt, isContinuation = false) => {
@@ -2137,7 +2223,6 @@ function handleQ2() {
           }
 
           if (title) {
-            // Row: dislike (left) — Google (center) — like (right)
             const actionsRow = document.createElement("div");
             actionsRow.style.display = "flex";
             actionsRow.style.alignItems = "center";
@@ -2145,7 +2230,6 @@ function handleQ2() {
             actionsRow.style.gap = "16px";
             actionsRow.style.margin = "14px auto 0";
 
-            // Use existing global gridThumbUp to build pixel-art SVG
             const svgFromGrid = (grid, flippedY = false) => {
               const rows = grid.length;
               const cols = Math.max(...grid.map(r => r.length));
@@ -2183,8 +2267,8 @@ function handleQ2() {
               b.style.height = "56px";
               b.style.padding = "0";
               b.style.border = "2px solid #555";
-              b.style.background = "#000";   // default: black bg
-              b.style.color = "#fff";        // default: white icon
+              b.style.background = "#000";
+              b.style.color = "#fff";
               b.style.cursor = "pointer";
               b.style.userSelect = "none";
               b.innerHTML = svg;
@@ -2229,7 +2313,7 @@ function handleQ2() {
             });
 
             const linkBtn = document.createElement("button");
-            linkBtn.textContent = "Google this film";
+            linkBtn.textContent = "Google it";
             linkBtn.style.display = "inline-block";
             linkBtn.addEventListener("click", (e) => {
               e.stopPropagation();
@@ -2240,10 +2324,7 @@ function handleQ2() {
               );
             });
 
-            // Order: dislike (left), Google (center), like (right)
-            actionsRow.appendChild(dislikeBtn);
             actionsRow.appendChild(linkBtn);
-            actionsRow.appendChild(likeBtn);
             buttonsDiv.appendChild(actionsRow);
 
             updateThumbStyles();
@@ -2319,6 +2400,7 @@ function handleQ3() {
   let lastPromptQ3 = "";
   let seenMoviesQ3 = [];
   let seenBtnQ3 = null;
+  let shareBtnQ3 = null;
 
   const MAX_YEAR = 2025;
 
@@ -2329,28 +2411,30 @@ function handleQ3() {
   };
 
   const ensureCloseButton = () => {
-    if (mobileDevice) {
-    const alreadyHasClose = [...buttonsDiv.querySelectorAll("button")].some(
-      (b) => b.textContent === "close"
-    );
-    if (!alreadyHasClose) {
-      const closeBtn = document.createElement("button");
-      closeBtn.textContent = "close";
-      closeBtn.style.marginTop = "18px";
-      closeBtn.style.marginRight = "18px";
-      closeBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        overlay.style.display = "none";
-        animateCameraForward(130, 300);
-      });
-      buttonsDiv.appendChild(closeBtn);
-    }
+    if (!mobileDevice) {
+      const alreadyHasClose = [...buttonsDiv.querySelectorAll("button")].some(
+        (b) => b.textContent === "close"
+      );
+      if (!alreadyHasClose) {
+        const closeBtn = document.createElement("button");
+        closeBtn.textContent = "close";
+        closeBtn.style.marginTop = "18px";
+        closeBtn.style.marginRight = "18px";
+        closeBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          overlay.style.display = "none";
+          animateCameraForward(130, 300);
+        });
+      }
     }
   };
 
   const appendSeenButton = () => {
     if (seenBtnQ3 && seenBtnQ3.isConnected) {
       seenBtnQ3.remove();
+    }
+    if (shareBtnQ3 && shareBtnQ3.isConnected) {
+      shareBtnQ3.remove();
     }
     seenBtnQ3 = document.createElement("button");
     seenBtnQ3.textContent = "I`ve seen that one!";
@@ -2361,7 +2445,6 @@ function handleQ3() {
         message.innerText = "No way you`ve seen all of those.";
         buttonsDiv.innerHTML = "";
 
-        // Close button
         const closeBtn = document.createElement("button");
         closeBtn.textContent = "close";
         closeBtn.style.marginTop = "18px";
@@ -2373,7 +2456,6 @@ function handleQ3() {
         });
         buttonsDiv.appendChild(closeBtn);
 
-        // Back button
         const backBtn = document.createElement("button");
         backBtn.textContent = "back";
         backBtn.style.marginTop = "18px";
@@ -2391,9 +2473,19 @@ function handleQ3() {
       }
     });
     buttonsDiv.appendChild(seenBtnQ3);
+
+    shareBtnQ3 = document.createElement("button");
+    shareBtnQ3.textContent = "Share";
+    shareBtnQ3.style.display = "inline-block";
+    shareBtnQ3.style.marginLeft = "14px";
+    shareBtnQ3.addEventListener("click", () => {
+      const txt = message.innerText + "\n\nhttps://alexradiy.github.io/cinematechnic/";
+      navigator.clipboard.writeText(txt);
+      shareBtnQ3.textContent = "Copied link";
+    });
+    buttonsDiv.appendChild(shareBtnQ3);
   };
 
-  // Utility
   const makeSelect = (options) => {
     const sel = document.createElement("select");
     sel.classList.add("overlay-input");
@@ -2434,7 +2526,6 @@ function handleQ3() {
     }
   };
 
-  // Three lists
   const chosenBySelect = makeSelect([
     "List",
     "S&S critic`s top 100 (2012)",
@@ -2454,7 +2545,25 @@ function handleQ3() {
   festivalYearSelect.classList.add("overlay-input");
   festivalYearSelect.style.display = "none";
 
+  // Helper to set all selects except the sender to their initial value
+  function resetOtherLists(except) {
+    if (except !== chosenBySelect && chosenBySelect.value !== "List") {
+      chosenBySelect.value = "List";
+    }
+    if (except !== festivalSelect && festivalSelect.value !== "Festival") {
+      festivalSelect.value = "Festival";
+      festivalYearSelect.style.display = "none";
+      festivalYearSelect.innerHTML = "";
+    }
+    if (except !== eraSelect && eraSelect.value !== "Era") {
+      eraSelect.value = "Era";
+    }
+  }
+
   festivalSelect.addEventListener("change", () => {
+    if (festivalSelect.value !== "Festival") {
+      resetOtherLists(festivalSelect);
+    }
     const fest = festivalSelect.value;
     if (fest === "Festival") {
       festivalYearSelect.style.display = "none";
@@ -2471,45 +2580,22 @@ function handleQ3() {
       });
       festivalYearSelect.style.display = "block";
     }
-    freezeListsIfNeeded();
   });
 
-  festivalYearSelect.addEventListener("change", freezeListsIfNeeded);
+  festivalYearSelect.addEventListener("change", () => {});
 
   const eraSelect = makeSelect([
     "Era", "Silent", "Pre-War", "1940s", "1950s", 
     "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"
   ]);
 
-  // Freeze logic: if one is chosen, freeze the other two
-  function freezeListsIfNeeded() {
-    const chosenByFrozen = chosenBySelect.value !== "List";
-    const festivalFrozen = festivalSelect.value !== "Festival";
-    const eraFrozen = eraSelect.value !== "Era";
-    // If any is chosen, freeze the others
-    if (chosenByFrozen) {
-      festivalSelect.disabled = true;
-      festivalYearSelect.disabled = true;
-      eraSelect.disabled = true;
-    } else if (festivalFrozen) {
-      chosenBySelect.disabled = true;
-      eraSelect.disabled = true;
-    } else if (eraFrozen) {
-      chosenBySelect.disabled = true;
-      festivalSelect.disabled = true;
-      festivalYearSelect.disabled = true;
-    } else {
-      chosenBySelect.disabled = false;
-      festivalSelect.disabled = false;
-      festivalYearSelect.disabled = false;
-      eraSelect.disabled = false;
-    }
+  function onListChange(e) {
+    resetOtherLists(e.target);
   }
 
-  chosenBySelect.addEventListener("change", freezeListsIfNeeded);
-  eraSelect.addEventListener("change", freezeListsIfNeeded);
+  chosenBySelect.addEventListener("change", onListChange);
+  eraSelect.addEventListener("change", onListChange);
 
-  // Border and label for lists
   const listsContainer = document.createElement("div");
   listsContainer.style.border = "2px solid #aaa";
   listsContainer.style.padding = "18px";
@@ -2540,7 +2626,6 @@ function handleQ3() {
 
   buttonsDiv.appendChild(listsContainer);
 
-  // Rest of the form
   const statusSelect = makeSelect([
     "Status",
     "historically significant",
@@ -2687,7 +2772,6 @@ function handleQ3() {
           }
 
           if (title) {
-            // Row: dislike (left) — Google (center) — like (right)
             const actionsRow = document.createElement("div");
             actionsRow.style.display = "flex";
             actionsRow.style.alignItems = "center";
@@ -2695,7 +2779,6 @@ function handleQ3() {
             actionsRow.style.gap = "16px";
             actionsRow.style.margin = "14px auto 0";
 
-            // Use existing global gridThumbUp to build pixel-art SVG
             const svgFromGrid = (grid, flippedY = false) => {
               const rows = grid.length;
               const cols = Math.max(...grid.map(r => r.length));
@@ -2733,8 +2816,8 @@ function handleQ3() {
               b.style.height = "56px";
               b.style.padding = "0";
               b.style.border = "2px solid #555";
-              b.style.background = "#000";   // default: black bg
-              b.style.color = "#fff";        // default: white icon
+              b.style.background = "#000";
+              b.style.color = "#fff";
               b.style.cursor = "pointer";
               b.style.userSelect = "none";
               b.innerHTML = svg;
@@ -2779,7 +2862,7 @@ function handleQ3() {
             });
 
             const linkBtn = document.createElement("button");
-            linkBtn.textContent = "Google this film";
+            linkBtn.textContent = "Google it";
             linkBtn.style.display = "inline-block";
             linkBtn.addEventListener("click", (e) => {
               e.stopPropagation();
@@ -2790,10 +2873,7 @@ function handleQ3() {
               );
             });
 
-            // Order: dislike (left), Google (center), like (right)
-            actionsRow.appendChild(dislikeBtn);
             actionsRow.appendChild(linkBtn);
-            actionsRow.appendChild(likeBtn);
             buttonsDiv.appendChild(actionsRow);
 
             updateThumbStyles();
@@ -2821,8 +2901,6 @@ function handleQ3() {
   buttonsDiv.appendChild(text1);
   buttonsDiv.appendChild(stylePerson);
   buttonsDiv.appendChild(submitBtn);
-
-  freezeListsIfNeeded();
 }
 
 function TimeToQuit(){
@@ -3032,7 +3110,7 @@ if (t < 154 + smokepause) {
   if (!Esc && overlay.style.display !== "flex") {
     raycaster.setFromCamera(mouse, camera);
 
-    const intersects = raycaster.intersectObjects([StandGuy, socks, chooselife, boomboxMesh, cassette1, cassette2, cassette3, vacation, SA, freefilms, siganim, goodbye]);
+    const intersects = raycaster.intersectObjects([StandGuy, socks, chooselife, boomboxMesh, cassette1, cassette2, cassette3, vacation, SA, freefilms, siganim, goodbye, jar]);
 
     if (intersects.length > 0) {
       const hit = intersects[0];
