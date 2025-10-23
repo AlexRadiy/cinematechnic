@@ -28,9 +28,21 @@ let Esc = false;
 let turnoff, outro, OverallLight, goodbye;
 let mobileDevice = false;
 
+//SECRETS CHECKER
+
 let menuOpen = false;
 let YOURFavStatus = false;
-let secret1found = false;
+let secretfound = {
+  SA: false,
+  vacation: false,
+  chooselife: false,
+};
+
+function allSecretsFound() {
+  return secretfound.SA && secretfound.vacation && secretfound.chooselife;
+}
+
+
 
 let highlightBox = null;
 
@@ -479,7 +491,7 @@ speechFiles = [
   cassette3 = new THREE.Mesh(new THREE.BoxGeometry(50, 10, 40), new THREE.MeshLambertMaterial({ map: loader.load('cover3.png'), transparent: true, side: THREE.DoubleSide }));
   cassette3.position.set(350, -94, -315);
   cassette3.rotation.y = 0.5;
-  //scene.add(cassette3);
+  scene.add(cassette3);
 
   pause = new THREE.Mesh(new THREE.PlaneGeometry(15, 15), new THREE.MeshLambertMaterial({ map: loader.load('pause.png'), transparent: true, side: THREE.DoubleSide }));
   pause.position.set(211, -31, -360);
@@ -681,9 +693,9 @@ scene.add(Smoke2);
   SA.name = "photo";
   StandGuy.name = "MENU";
   boomboxMesh.name = "music";
-  cassette1.name = "Vibes";
+  cassette1.name = "Plastic Bouquet";
   cassette2.name = "Vacation in Zen";
-  cassette3.name = "Meow";
+  cassette3.name = "Call me Junk E.";
   socks.name = "Socks";
   freefilms.name = "free films";
   siganim.name = "booklet";
@@ -800,16 +812,19 @@ function onClick() {
 
   const chooselifeIntersects = raycaster.intersectObject(chooselife);
   if (chooselifeIntersects.length > 0) {
+    secretfound.chooselife = true;
     chooselifefunction();
   }
 
   const vacationIntersects = raycaster.intersectObject(vacation);
   if (vacationIntersects.length > 0) {
+    secretfound.vacation = true;
     vacationfunction();
   } 
 
     const SAIntersects = raycaster.intersectObject(SA);
   if (SAIntersects.length > 0) {
+    secretfound.SA = true;
     SAfunction();
   } 
 
@@ -852,7 +867,6 @@ function onClick() {
 }
 
 function siganimfunction() {
-  secret1found = true;
   overlay.style.display = "flex";
   buttonsDiv.innerHTML = "";
   message.innerText = "";
@@ -2036,7 +2050,7 @@ function handleQ1() {
     }
   });
 
-  if (secret1found === true) {
+  if (allSecretsFound()) {
     const btn2 = document.createElement("button");
     btn2.textContent = "What would you recommend?";
     btn2.style.display = "block";
@@ -2044,7 +2058,7 @@ function handleQ1() {
     btn2.addEventListener("click", () => {
       YOURFavStatus = true;
              buttonsDiv.innerHTML = ""
-      speechAnimation("Hm... You really should check out `Cremator`. Basically Ari Aster style story with Urusevsky visuals but 1969 and Checkoslovakian", message, 30)
+      speechAnimation("Hm... You really should check out `Cremator`. Basically Ari Aster style story with Lantimos B&W visuals but 1969 and Cheskoslovakian", message, 30)
 
           .then(() => {
 
@@ -2081,6 +2095,7 @@ function handleQ1() {
       closeBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         handleQ1();
+        animateCameraForward(80, 300);
       });
       buttonsDiv.appendChild(closeBtn);
     });
