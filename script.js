@@ -2664,6 +2664,20 @@ function handleQ3() {
     keyWords.rows = Math.min(Math.max(lines, scrollRows), 4);
   });
   keyWords.style.display = "block";
+  keyWords.style.marginTop = "25px";
+
+  let AuteurOn = false;
+  const AuteurBtn = document.createElement("button");
+  const setAuteurLabel = () => (AuteurBtn.textContent = `Film d\`autoreur: ${AuteurOn ? "yes" : "no"}`);
+  setAuteurLabel();
+  AuteurBtn.addEventListener("click", () => {
+    AuteurOn = !AuteurOn;
+    setAuteurLabel();
+  });
+  AuteurBtn.style.display = "block";
+  AuteurBtn.style.marginTop = "25px";
+  AuteurBtn.style.margin = "25px auto";
+  AuteurBtn.style.textAlign = "center";
 
   const stylePerson = document.createElement("input");
   stylePerson.type = "text";
@@ -2730,6 +2744,11 @@ function handleQ3() {
       const kw = (keyWords.value || "").trim();
       if (kw) {
         parts.push(`VERY IMPORTANT: It should be ${kw} themed.`);
+        pushCount++;
+      }
+
+      if (AuteurOn = true) {
+        parts.push(`It should be made by a famous director.`);
         pushCount++;
       }
 
@@ -2912,6 +2931,7 @@ function handleQ3() {
   text1.style.marginTop = "30px";
 
   buttonsDiv.appendChild(statusSelect);
+  buttonsDiv.appendChild(AuteurBtn);
   buttonsDiv.appendChild(keyWords);
   buttonsDiv.appendChild(text1);
   buttonsDiv.appendChild(stylePerson);
