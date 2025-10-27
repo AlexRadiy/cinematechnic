@@ -1273,6 +1273,7 @@ function socksCredits() {
         }
         message.innerText = "Pending..."
         buttonsDiv.innerHTML = "";
+        setSubtext(``);
         emailjs.init("j6eGEWxM4dbVz2LIQ");
         emailjs.send("service_d1s52e7", "template_ss3e15y", {
             message: feedbackText
@@ -2668,7 +2669,7 @@ function handleQ3() {
 
   let AuteurOn = false;
   const AuteurBtn = document.createElement("button");
-  const setAuteurLabel = () => (AuteurBtn.textContent = `Film d\`autoreur: ${AuteurOn ? "yes" : "no"}`);
+  const setAuteurLabel = () => (AuteurBtn.textContent = `Renowned director: ${AuteurOn ? "yes" : "no"}`);
   setAuteurLabel();
   AuteurBtn.addEventListener("click", () => {
     AuteurOn = !AuteurOn;
@@ -2949,6 +2950,8 @@ function TimeToQuit(){
   camera.position.z += 130;
   goodbye.position.set(0, -94, -340);
   StandGuy.position.set(0,0, -1000);
+  Smoke1.position.set(0,0, -1000);
+  Smoke2.position.set(0,0, -1000);
 }
 
 function EscapeTheMatrix() {
