@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.skypack.dev/three@0.150.1';
+import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
 
 
 //It`s all vibe coding, plus I was learning on the go. Don`t judge harshly. 
@@ -1197,6 +1197,7 @@ function SAfunction(){
 function vacationfunction(){
       overlay.style.display = "flex";
     buttonsDiv.innerHTML = "";
+    setSubtext('');
   speechAnimation("Saigon… Every time I think I'm gonna wake up back in the jungle.", message, 30)
     .then(() => {
       const closeBtn = document.createElement("button");
